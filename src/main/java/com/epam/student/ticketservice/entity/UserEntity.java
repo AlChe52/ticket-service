@@ -21,9 +21,9 @@ public class UserEntity {
     private String firstname;
     private String lastname;
     private String passport;
-    @OneToMany
-    @JoinColumn (name = "ticket_id")
-    private List <TicketEntity> tickets;
+//    @OneToMany
+//    @JoinColumn (name = "ticket_id")
+//    private List <TicketEntity> tickets;
     private Boolean isDeleted;
 
 }

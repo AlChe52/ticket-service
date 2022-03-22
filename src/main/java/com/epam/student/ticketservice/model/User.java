@@ -11,7 +11,7 @@ public class User {
     String firstname;
     String lastname;
     String passport;
-    List<Ticket> tickets;
+  //  List<Ticket> tickets;
     Boolean isDeleted;
 
 }

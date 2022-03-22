@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void addUser(User user) {
         UserEntity userEntity = mapper.map(user,UserEntity.class);
+        userRepository.save(userEntity);
 
     }
 }
