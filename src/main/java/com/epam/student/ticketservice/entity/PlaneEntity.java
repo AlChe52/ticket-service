@@ -1,6 +1,5 @@
 package com.epam.student.ticketservice.entity;
 
-import com.epam.student.ticketservice.model.Ticket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

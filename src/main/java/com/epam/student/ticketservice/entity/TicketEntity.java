@@ -1,7 +1,5 @@
 package com.epam.student.ticketservice.entity;
 
-import com.epam.student.ticketservice.model.Plane;
-import com.epam.student.ticketservice.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,7 @@ public class TicketEntity {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne
+    @ManyToOne
     @JoinColumn (name = "plane_id")
     private PlaneEntity plane;
     @OneToOne
