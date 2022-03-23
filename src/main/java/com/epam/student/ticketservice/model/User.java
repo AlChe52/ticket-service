@@ -1,17 +1,19 @@
 package com.epam.student.ticketservice.model;
 
-import lombok.Value;
+import lombok.*;
 
 import java.util.List;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     Long id;
     String firstname;
     String lastname;
     String passport;
-  //  List<Ticket> tickets;
+    List<Ticket> tickets;
     Boolean isDeleted;
 
 }

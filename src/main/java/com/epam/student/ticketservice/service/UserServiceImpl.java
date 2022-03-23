@@ -22,7 +22,6 @@ public class UserServiceImpl implements UserService{
     public User getUserById(Long id) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundExeption("Sorry, user nor found: id="+id));
-
         return mapper.map(userEntity,User.class);
     }
 
@@ -33,15 +32,33 @@ public class UserServiceImpl implements UserService{
         for (UserEntity userEntity: iterable) {
             users.add(mapper.map(userEntity,User.class));
         }
-
-
         return users;
     }
 
     @Override
     public void addUser(User user) {
         UserEntity userEntity = mapper.map(user,UserEntity.class);
+        userEntity.setIsDeleted(Boolean.FALSE);
         userRepository.save(userEntity);
+    }
+
+    @Override
+    public void editUser(User user) {
+        if (!userRepository.existsById(user.getId()))
+            throw new UserNotFoundExeption("User not found, id="+user.getId());
+        UserEntity userEntity = mapper.map(user,UserEntity.class);
+        userEntity.setIsDeleted(Boolean.FALSE);
+        userRepository.save(userEntity);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+         User user = getUserById(id);
+         UserEntity userEntity = mapper.map(user,UserEntity.class);
+         userEntity.setIsDeleted(Boolean.TRUE);
+         userRepository.save(userEntity);
+
 
     }
+
 }

@@ -1,6 +1,5 @@
 package com.epam.student.ticketservice.web;
 
-import com.epam.student.ticketservice.mapper.UserDTOtoUserMapper;
 import com.epam.student.ticketservice.model.User;
 import com.epam.student.ticketservice.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final UserDTOtoUserMapper mapper;
+    private final MapperFacade mapper;
 
     @GetMapping ("/{id}")
     public User getUserById (@PathVariable Long id){
@@ -30,7 +29,18 @@ public class UserController {
 
    @PostMapping
     public void addUser (@RequestBody UserDTO userDTO) {
-        userService.addUser(mapper.map(userDTO,User.class));
+       userService.addUser(mapper.map(userDTO, User.class));
+   }
+   @PutMapping ("/{id}")
+   public void editUser (@PathVariable Long id, @RequestBody UserDTO userDTO){
+        User user = mapper.map(userDTO,User.class);
+        user.setId(id);
+        userService.editUser(user);
+   }
+
+   @PatchMapping ("/{id}")
+   public void deleteUser (@PathVariable Long id) {
+        userService.deleteUser(id);
    }
 
 }

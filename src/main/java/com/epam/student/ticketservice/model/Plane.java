@@ -1,12 +1,16 @@
 package com.epam.student.ticketservice.model;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Plane {
     Long id;
     String name;
