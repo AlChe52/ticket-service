@@ -17,7 +17,7 @@ public class Plane {
     Integer places;
     LocalDate depart;
     Duration duration;
-    String from;
+    String fromm;
     String to;
     List <Ticket> tickets;
     Boolean isDeleted;

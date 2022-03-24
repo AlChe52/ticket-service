@@ -1,10 +1,15 @@
 package com.epam.student.ticketservice.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.math.BigDecimal;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ticket {
 
     Long id;
