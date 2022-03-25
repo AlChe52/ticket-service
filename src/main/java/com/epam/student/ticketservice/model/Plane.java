@@ -16,7 +16,7 @@ public class Plane {
     String name;
     Integer places;
     LocalDate depart;
-    Duration duration;
+   // Duration duration;
     String fromm;
     String to;
     List <Ticket> tickets;

@@ -26,6 +26,7 @@ public class PlaneController {
     Plane getPlaneById (@PathVariable Long id) {
         return planeService.getPlaneById(id);
     }
+
     @PostMapping
     public void addPlane(@RequestBody PlaneDTO planeDTO) {
         System.out.println(planeDTO);

@@ -16,13 +16,14 @@ public class TicketEntity {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne
-    @JoinColumn (name = "plane_id")
+    @ManyToOne (fetch = FetchType.LAZY)
+   // @JoinColumn (name = "plane_id")
     private PlaneEntity plane;
     @OneToOne
     @JoinColumn (name = "user_id")
     private UserEntity user;
     private BigDecimal price;
     private Boolean isDeleted;
+    private Boolean isSold;
 
 }

@@ -22,11 +22,11 @@ public class PlaneEntity {
     private String name;
     private Integer places;
     private LocalDate depart;
-    private Duration duration;
+   // private Duration duration;
     private String fromm;
     private String to;
-    @OneToMany
-    @JoinColumn (name = "ticket_id")
+    @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+   // @JoinColumn (name = "ticket_id")
     private List<TicketEntity> tickets;
     private Boolean isDeleted;
 

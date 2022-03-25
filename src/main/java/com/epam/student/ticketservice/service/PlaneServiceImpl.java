@@ -1,10 +1,12 @@
 package com.epam.student.ticketservice.service;
 
 import com.epam.student.ticketservice.entity.PlaneEntity;
+import com.epam.student.ticketservice.entity.TicketEntity;
 import com.epam.student.ticketservice.exeptions.PlaneNotFoundExeption;
 import com.epam.student.ticketservice.model.Plane;
 import com.epam.student.ticketservice.model.Ticket;
 import com.epam.student.ticketservice.repository.PlaneRepository;
+//import com.epam.student.ticketservice.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaneServiceImpl implements PlaneService {
     private final PlaneRepository planeRepository ;
+  //  private final TicketRepository ticketRepository;
     private final MapperFacade mapper;
 
     @Override
@@ -39,19 +42,21 @@ public class PlaneServiceImpl implements PlaneService {
     public void addPlane(Plane plane) {
         System.out.println(plane);
       ArrayList <Ticket> tickets = new ArrayList<>();
-      int k=plane.getPlaces();
-        for (int i = 0; i <k; i++) {
-          tickets.add(new Ticket());
+        for (int i = 0; i <plane.getPlaces(); i++) {
+            Ticket ticket = new Ticket();
+         //   ticketRepository.save(ticketEntity);
+           tickets.add(ticket);
         }
         plane.setTickets(tickets);
         PlaneEntity planeEntity = mapper.map(plane,PlaneEntity.class);
         planeEntity.setIsDeleted(Boolean.FALSE);
+
         planeRepository.save(planeEntity);
     }
 
-
     @Override
     public void editPlane(Plane plane) {
+
 
     }
 

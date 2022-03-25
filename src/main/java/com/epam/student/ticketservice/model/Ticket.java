@@ -17,5 +17,6 @@ public class Ticket {
     User user;
     BigDecimal price;
     Boolean isDeleted;
+    Boolean isSold;
 
 }
