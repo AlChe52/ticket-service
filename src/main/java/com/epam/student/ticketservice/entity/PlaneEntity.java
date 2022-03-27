@@ -17,16 +17,17 @@ import java.util.List;
 public class PlaneEntity {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private Integer places;
     private LocalDate depart;
-   // private Duration duration;
-    private String fromm;
+    private Duration duration;
+    @Column (name = "\"FROM\"")
+    private String from;
     private String to;
+
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
-   // @JoinColumn (name = "ticket_id")
     private List<TicketEntity> tickets;
     private Boolean isDeleted;
 

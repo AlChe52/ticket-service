@@ -1,6 +1,5 @@
 package com.epam.student.ticketservice.entity;
 
-import com.epam.student.ticketservice.model.Ticket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,14 +15,13 @@ import java.util.List;
 public class UserEntity {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstname;
     private String lastname;
     private String passport;
-//    @OneToMany
-//    @JoinColumn (name = "ticket_id")
-//    private List <TicketEntity> tickets;
+    @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TicketEntity> tickets;
     private Boolean isDeleted;
 
 }

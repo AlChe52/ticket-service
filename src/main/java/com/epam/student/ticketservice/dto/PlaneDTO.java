@@ -1,6 +1,7 @@
 package com.epam.student.ticketservice.dto;
 
 import lombok.Data;
+
 import java.time.Duration;
 import java.time.LocalDate;
 
@@ -10,8 +11,8 @@ public class PlaneDTO {
     private String name;
     private Integer places;
     private LocalDate depart;
-   // private Duration duration;
-    private String fromm;
+    private Duration duration;
+    private String from;
     private String to;
 
 }
