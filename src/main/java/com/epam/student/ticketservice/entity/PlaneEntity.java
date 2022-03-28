@@ -28,6 +28,7 @@ public class PlaneEntity {
     private String to;
 
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+  //  @JoinColumn (name = "ticket_id")
     private List<TicketEntity> tickets;
     private Boolean isDeleted;
 

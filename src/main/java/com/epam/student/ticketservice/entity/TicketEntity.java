@@ -19,9 +19,13 @@ public class TicketEntity {
 
 
     @ManyToOne (fetch = FetchType.LAZY)
+    //@JoinColumn (name = "plane_id")
     private PlaneEntity plane;
-    @ManyToOne (fetch = FetchType.LAZY)
+
+    @ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn (name = "user_id")
     private UserEntity user;
+
     private BigDecimal price;
     private Boolean isDeleted;
     private Boolean isSold;
