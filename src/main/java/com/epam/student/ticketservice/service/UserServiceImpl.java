@@ -55,10 +55,8 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(Long id) {
          User user = getUserById(id);
          UserEntity userEntity = mapper.map(user,UserEntity.class);
-         userEntity.setIsDeleted(Boolean.TRUE);
+         userEntity.setIsDeleted(true);
          userRepository.save(userEntity);
-
-
     }
 
 }
