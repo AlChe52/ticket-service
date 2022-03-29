@@ -18,7 +18,7 @@ public class TicketEntity {
     private Long id;
 
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     //@JoinColumn (name = "plane_id")
     private PlaneEntity plane;
 

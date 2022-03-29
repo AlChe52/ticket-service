@@ -3,7 +3,6 @@ package com.epam.student.ticketservice.service;
 import com.epam.student.ticketservice.entity.PlaneEntity;
 import com.epam.student.ticketservice.entity.TicketEntity;
 import com.epam.student.ticketservice.exeptions.PlaneNotFoundExeption;
-import com.epam.student.ticketservice.exeptions.UserNotFoundExeption;
 import com.epam.student.ticketservice.model.Plane;
 import com.epam.student.ticketservice.model.Ticket;
 import com.epam.student.ticketservice.repository.PlaneRepository;
@@ -44,14 +43,7 @@ public class PlaneServiceImpl implements PlaneService {
 
     @Override
     public void addPlane(Plane plane) {
-        List<Ticket> tickets = new ArrayList<>();
-        for (int i = 0; i < plane.getPlaces(); i++) {
-            Ticket ticket = new Ticket();
-            ticket.setIsDeleted(Boolean.FALSE);
-            ticket.setIsSold(Boolean.FALSE);
-            tickets.add(ticket);
-        }
-        plane.setTickets(tickets);
+        plane.setTickets(getTicketList(plane));
         PlaneEntity planeEntity = mapper.map(plane,PlaneEntity.class);
         planeEntity.setIsDeleted(Boolean.FALSE);
         planeRepository.save(planeEntity);
@@ -60,7 +52,7 @@ public class PlaneServiceImpl implements PlaneService {
     @Override
     public void editPlane(Plane plane) {
         if (!planeRepository.existsById(plane.getId()))
-            throw new UserNotFoundExeption("Plane not found, id="+plane.getId());
+            throw new PlaneNotFoundExeption("Plane not found, id="+plane.getId());
 
         plane.setTickets(getTicketList(plane));
         PlaneEntity planeEntity = mapper.map(plane,PlaneEntity.class);
@@ -70,27 +62,33 @@ public class PlaneServiceImpl implements PlaneService {
 
     @Override
     public void deletePlane(Long id) {
+        Plane plane = getPlaneById(id);
+        PlaneEntity planeEntity = mapper.map(plane,PlaneEntity.class);
+        planeEntity.setIsDeleted(true);
+        planeRepository.save(planeEntity);
+        List<TicketEntity> iterable = ticketRepository.findAllTicketsByPlaneId(id);
 
-
+        for ( TicketEntity ticketEntity: iterable) {
+            ticketEntity.setIsDeleted(true);
+            ticketRepository.save(ticketEntity);
+        }
     }
 
     private List <Ticket> getTicketList (Plane plane) {
         List<Ticket> tickets = new ArrayList<>();
-//       if (plane.getId()==null) {
-//              for (int i = 0; i < plane.getPlaces(); i++) {
-//                Ticket ticket = new Ticket();
-//                ticket.setIsDeleted(Boolean.FALSE);
-//                ticket.setIsSold(Boolean.FALSE);
-//                tickets.add(ticket);
-//            }
-//            return tickets;
-//        }
-
+       if (plane.getId()==null) {
+              for (int i = 0; i < plane.getPlaces(); i++) {
+                Ticket ticket = new Ticket();
+                ticket.setIsDeleted(Boolean.FALSE);
+                ticket.setIsSold(Boolean.FALSE);
+                tickets.add(ticket);
+            }
+            return tickets;
+        }
         List<TicketEntity> iterable = ticketRepository.findAllTicketsByPlaneId(plane.getId());
 
-
        for ( TicketEntity ticketEntity: iterable) {
-           ticketEntity.setIsSold(Boolean.TRUE);
+           ticketEntity.setIsSold(false);
            tickets.add(mapper.map(ticketEntity,Ticket.class));
        }
 

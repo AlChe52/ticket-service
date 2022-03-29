@@ -42,4 +42,9 @@ public class PlaneController {
         planeService.editPlane(plane);
     }
 
+    @PatchMapping ("/{id}")
+    public void deletePlane (@PathVariable Long id) {
+        planeService.deletePlane(id);
+    }
+
 }
