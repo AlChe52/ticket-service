@@ -17,7 +17,7 @@ import java.util.List;
 public class PlaneEntity {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private Integer places;
@@ -28,7 +28,7 @@ public class PlaneEntity {
     private String to;
 
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
-  //  @JoinColumn (name = "ticket_id")
+    //@JoinColumn (name ="planeid" )
     private List<TicketEntity> tickets;
     private Boolean isDeleted;
 

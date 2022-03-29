@@ -66,8 +66,7 @@ public class PlaneServiceImpl implements PlaneService {
         PlaneEntity planeEntity = mapper.map(plane,PlaneEntity.class);
         planeEntity.setIsDeleted(true);
         planeRepository.save(planeEntity);
-        List<TicketEntity> iterable = ticketRepository.findAllTicketsByPlaneId(id);
-
+        List<TicketEntity> iterable = ticketRepository.getTicketEntity(plane.getId());
         for ( TicketEntity ticketEntity: iterable) {
             ticketEntity.setIsDeleted(true);
             ticketRepository.save(ticketEntity);
@@ -75,6 +74,8 @@ public class PlaneServiceImpl implements PlaneService {
     }
 
     private List <Ticket> getTicketList (Plane plane) {
+       Long l = plane.getId();
+        System.out.println(l);
         List<Ticket> tickets = new ArrayList<>();
        if (plane.getId()==null) {
               for (int i = 0; i < plane.getPlaces(); i++) {
@@ -85,9 +86,16 @@ public class PlaneServiceImpl implements PlaneService {
             }
             return tickets;
         }
-        List<TicketEntity> iterable = ticketRepository.findAllTicketsByPlaneId(plane.getId());
 
-       for ( TicketEntity ticketEntity: iterable) {
+        List<TicketEntity> iterable = ticketRepository.getTicketEntityByPlaneEntityId(plane.getId());
+        for (TicketEntity ticketEntity: iterable) {
+            System.out.println(ticketEntity);
+        }
+
+        List<TicketEntity> iterable1 = ticketRepository.getTicketEntity(plane.getId());
+
+       for ( TicketEntity ticketEntity: iterable1) {
+           System.out.println(ticketEntity);
            ticketEntity.setIsSold(false);
            tickets.add(mapper.map(ticketEntity,Ticket.class));
        }

@@ -15,13 +15,15 @@ import java.util.List;
 public class UserEntity {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
     private String firstname;
     private String lastname;
     private String passport;
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+   //- @JoinColumn (name = "userid")
     private List<TicketEntity> tickets;
+
     private Boolean isDeleted;
 
 }

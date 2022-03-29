@@ -14,17 +14,15 @@ import java.math.BigDecimal;
 @Table(name = "ticket")
 public class TicketEntity {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
 
 
-    @ManyToOne (fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    //@JoinColumn (name = "plane_id")
-    private PlaneEntity plane;
+    @ManyToOne (fetch = FetchType.LAZY)
+    private PlaneEntity planeEntity;
 
-    @ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn (name = "user_id")
-    private UserEntity user;
+    @ManyToOne (fetch = FetchType.LAZY)
+    private UserEntity userEntity;
 
     private BigDecimal price;
     private Boolean isDeleted;

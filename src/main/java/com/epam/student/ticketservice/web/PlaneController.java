@@ -1,9 +1,7 @@
 package com.epam.student.ticketservice.web;
 
 import com.epam.student.ticketservice.dto.PlaneDTO;
-import com.epam.student.ticketservice.dto.UserDTO;
 import com.epam.student.ticketservice.model.Plane;
-import com.epam.student.ticketservice.model.User;
 import com.epam.student.ticketservice.service.PlaneService;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
@@ -39,6 +37,7 @@ public class PlaneController {
     public void editPlane (@PathVariable Long id, @RequestBody PlaneDTO planeDTO){
         Plane plane = mapper.map(planeDTO,Plane.class);
         plane.setId(id);
+        System.out.println(plane);
         planeService.editPlane(plane);
     }
 
