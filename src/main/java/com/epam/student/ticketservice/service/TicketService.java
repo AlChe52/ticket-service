@@ -2,9 +2,13 @@ package com.epam.student.ticketservice.service;
 
 import com.epam.student.ticketservice.model.Ticket;
 
+import java.util.List;
+
 public interface TicketService {
 
-    Ticket getTicketById (Long id);
+    List<Ticket> getTicketsByPlaneId (Long id);
+
+    List <Ticket> getTicketsByPlaneIdWithFilter (Long id, String filter);
 
 
 }

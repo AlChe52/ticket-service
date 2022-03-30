@@ -21,7 +21,7 @@ public class UserEntity {
     private String lastname;
     private String passport;
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
-   //- @JoinColumn (name = "userid")
+    @JoinColumn (name = "user_entity_id")
     private List<TicketEntity> tickets;
 
     private Boolean isDeleted;

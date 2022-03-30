@@ -2,12 +2,15 @@ package com.epam.student.ticketservice.service;
 
 import com.epam.student.ticketservice.entity.TicketEntity;
 import com.epam.student.ticketservice.exeptions.TicketNotFoundExeption;
+import com.epam.student.ticketservice.exeptions.WrongQueryExeption;
 import com.epam.student.ticketservice.model.Ticket;
 import com.epam.student.ticketservice.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -18,12 +21,40 @@ public class TicketServiceImpl implements TicketService{
     private final MapperFacade mapper;
 
     @Override
-    public Ticket getTicketById(Long id) {
-       TicketEntity ticketEntity = ticketRepository.findById(id)
-                .orElseThrow(() -> new TicketNotFoundExeption("Sorry, ticket nor found: id="+id));
-        return mapper.map(ticketEntity, Ticket.class);
+    public List<Ticket> getTicketsByPlaneId(Long id) {
+           List <Ticket> tickets = new ArrayList<>();
+
+     Iterable <TicketEntity> iterable = ticketRepository.getTicketEntity(id);
+         for (TicketEntity ticketEntity:iterable) {
+             tickets.add(mapper.map(ticketEntity, Ticket.class));
+         }
+        return tickets;
      }
 
+    @Override
+    public List<Ticket> getTicketsByPlaneIdWithFilter(Long id, String filter) {
+        List <Ticket> tickets = new ArrayList<>();
+        if (filter==null) {
+            Iterable<TicketEntity> iterable = ticketRepository.getTicketEntity(id);
+            for (TicketEntity ticketEntity : iterable) {
+                tickets.add(mapper.map(ticketEntity, Ticket.class));
+            }
+            return tickets;
+        }
+        if (filter.equals(true) || filter.equals(false)) {
+            throw new WrongQueryExeption("Wrong query");
+        }
+
+
+
+        Iterable <TicketEntity> iterable = ticketRepository.getTicketsByFilter(id,filter);
+        for (TicketEntity ticketEntity:iterable) {
+            tickets.add(mapper.map(ticketEntity, Ticket.class));
+        }
+
+        return tickets;
     }
+
+}
 
 

@@ -26,9 +26,9 @@ public class PlaneServiceImpl implements PlaneService {
         ArrayList<Plane> planes = new ArrayList<>();
         Iterable <PlaneEntity>  iterable = planeRepository.getAllPlanesByCurrentDate();
          for (PlaneEntity planeEntity : iterable) {
-
-             planes.add(mapper.map(planeEntity,Plane.class));
-
+             Plane plane = mapper.map(planeEntity,Plane.class);
+             plane.setTickets(getTicketList(plane));
+             planes.add(plane);
          }
         return planes;
     }
@@ -74,10 +74,8 @@ public class PlaneServiceImpl implements PlaneService {
     }
 
     private List <Ticket> getTicketList (Plane plane) {
-       Long l = plane.getId();
-        System.out.println(l);
-        List<Ticket> tickets = new ArrayList<>();
-       if (plane.getId()==null) {
+          List<Ticket> tickets = new ArrayList<>();
+         if (plane.getId()==null) {
               for (int i = 0; i < plane.getPlaces(); i++) {
                 Ticket ticket = new Ticket();
                 ticket.setIsDeleted(Boolean.FALSE);
@@ -87,18 +85,17 @@ public class PlaneServiceImpl implements PlaneService {
             return tickets;
         }
 
-        List<TicketEntity> iterable = ticketRepository.getTicketEntityByPlaneEntityId(plane.getId());
-        for (TicketEntity ticketEntity: iterable) {
-            System.out.println(ticketEntity);
-        }
+        List<TicketEntity> iterable = ticketRepository.getTicketEntity(plane.getId());
 
-        List<TicketEntity> iterable1 = ticketRepository.getTicketEntity(plane.getId());
-
-       for ( TicketEntity ticketEntity: iterable1) {
-           System.out.println(ticketEntity);
-           ticketEntity.setIsSold(false);
+       for ( TicketEntity ticketEntity: iterable) {
+            ticketEntity.setIsSold(false);
            tickets.add(mapper.map(ticketEntity,Ticket.class));
        }
+
+       for (Ticket ticket: tickets) {
+           ticket.setPlane(getPlaneByIdTicket(plane.getId()));
+       }
+
 
         if ((plane.getPlaces() - tickets.size()) < 0) {
             tickets.removeAll(tickets.subList(plane.getPlaces(), tickets.size()));
@@ -116,4 +113,11 @@ public class PlaneServiceImpl implements PlaneService {
         return tickets;
     }
 
+        private Plane getPlaneByIdTicket (Long id) {
+
+        Plane plane = mapper.map(planeRepository.findPlaneByTicketId(id), Plane.class);
+
+        plane.setTickets(null);
+         return plane;
+        }
 }
