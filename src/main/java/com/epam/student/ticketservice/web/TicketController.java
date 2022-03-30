@@ -17,9 +17,9 @@ public class TicketController {
 
     @GetMapping("/tickets")
     public List<Ticket> getTicketsByPlaneId(@PathVariable Long id,
-                                            @RequestParam String filter) {
+                                            @RequestParam (required = false) Boolean isSold) {
 
-        return ticketService.getTicketsByPlaneIdWithFilter(id,filter);
+        return ticketService.getTicketsByPlaneIdWithFilter(id,isSold);
 
 
     }

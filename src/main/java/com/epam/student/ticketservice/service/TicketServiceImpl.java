@@ -1,8 +1,6 @@
 package com.epam.student.ticketservice.service;
 
 import com.epam.student.ticketservice.entity.TicketEntity;
-import com.epam.student.ticketservice.exeptions.TicketNotFoundExeption;
-import com.epam.student.ticketservice.exeptions.WrongQueryExeption;
 import com.epam.student.ticketservice.model.Ticket;
 import com.epam.student.ticketservice.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,22 +30,23 @@ public class TicketServiceImpl implements TicketService{
      }
 
     @Override
-    public List<Ticket> getTicketsByPlaneIdWithFilter(Long id, String filter) {
+    public List<Ticket> getTicketsByPlaneIdWithFilter(Long id, Boolean isSold) {
+        System.out.println(isSold);
         List <Ticket> tickets = new ArrayList<>();
-        if (filter==null) {
+        if (isSold==null) {
             Iterable<TicketEntity> iterable = ticketRepository.getTicketEntity(id);
             for (TicketEntity ticketEntity : iterable) {
                 tickets.add(mapper.map(ticketEntity, Ticket.class));
             }
             return tickets;
         }
-        if (filter.equals(true) || filter.equals(false)) {
-            throw new WrongQueryExeption("Wrong query");
-        }
+//        if (filter.equals(true) || filter.equals(false)) {
+//            throw new WrongQueryExeption("Wrong query");
+//        }
 
 
 
-        Iterable <TicketEntity> iterable = ticketRepository.getTicketsByFilter(id,filter);
+        Iterable <TicketEntity> iterable = ticketRepository.getTicketsByFilter(id, true);
         for (TicketEntity ticketEntity:iterable) {
             tickets.add(mapper.map(ticketEntity, Ticket.class));
         }

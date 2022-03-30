@@ -8,7 +8,7 @@ public interface TicketService {
 
     List<Ticket> getTicketsByPlaneId (Long id);
 
-    List <Ticket> getTicketsByPlaneIdWithFilter (Long id, String filter);
+    List <Ticket> getTicketsByPlaneIdWithFilter (Long id, Boolean isSold);
 
 
 }

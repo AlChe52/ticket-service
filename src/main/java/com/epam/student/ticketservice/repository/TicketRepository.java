@@ -13,6 +13,6 @@ public interface TicketRepository extends JpaRepository <TicketEntity, Long> {
       @Query (value = "SELECT * FROM ticket JOIN  plane ON plane.id",nativeQuery = true)
       List <TicketEntity> getTicketEntity (Long id);
 
-      @Query (value = "SELECT * FROM ticket WHERE isSold=filter JOIN  plane ON plane.id" ,nativeQuery = true)
-      List <TicketEntity> getTicketsByFilter (Long id, @Param("filter") String filter);
+      @Query (value = "SELECT * FROM ticket t  JOIN  plane p ON p.id=:id WHERE t.issold=:isSold" ,nativeQuery = true)
+      List <TicketEntity> getTicketsByFilter (@Param("id") Long id, @Param("isSold") Boolean isSold);
 }
