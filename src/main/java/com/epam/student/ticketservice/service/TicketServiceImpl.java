@@ -1,6 +1,7 @@
 package com.epam.student.ticketservice.service;
 
 import com.epam.student.ticketservice.entity.TicketEntity;
+import com.epam.student.ticketservice.exeptions.TicketNotFoundExeption;
 import com.epam.student.ticketservice.model.Ticket;
 import com.epam.student.ticketservice.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,13 @@ public class TicketServiceImpl implements TicketService{
             tickets.add(mapper.map(ticketEntity, Ticket.class));
         }
         return tickets;
+    }
+
+    @Override
+    public Ticket getTicketById(Long id) {
+        TicketEntity ticketEntity = ticketRepository.findById(id)
+                .orElseThrow(() -> new TicketNotFoundExeption("Sorry, ticket not found: id="+id));
+        return mapper.map(ticketEntity,Ticket.class);
     }
 
 }

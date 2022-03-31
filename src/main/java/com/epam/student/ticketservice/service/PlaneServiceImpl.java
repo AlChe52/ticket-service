@@ -27,7 +27,7 @@ public class PlaneServiceImpl implements PlaneService {
         Iterable <PlaneEntity>  iterable = planeRepository.getAllPlanesByCurrentDate();
          for (PlaneEntity planeEntity : iterable) {
              Plane plane = mapper.map(planeEntity,Plane.class);
-             plane.setTickets(getTicketList(plane));
+            plane.setTickets(getTicketList(plane));
              planes.add(plane);
          }
         return planes;

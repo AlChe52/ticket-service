@@ -10,5 +10,7 @@ public interface TicketService {
 
     List <Ticket> getTicketsByPlaneIdWithQuery (Long id,Boolean isSold);
 
+    Ticket getTicketById (Long id);
+
 
 }
