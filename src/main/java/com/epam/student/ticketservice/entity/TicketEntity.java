@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Table(name = "ticket")
 public class TicketEntity {
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     private Long id;
 
 

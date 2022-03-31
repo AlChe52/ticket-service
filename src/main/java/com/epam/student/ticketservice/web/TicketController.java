@@ -19,7 +19,7 @@ public class TicketController {
     public List<Ticket> getTicketsByPlaneId(@PathVariable Long id,
                                             @RequestParam (required = false) Boolean isSold) {
 
-        return ticketService.getTicketsByPlaneIdWithFilter(id,isSold);
+        return ticketService.getTicketsByPlaneIdWithQuery(id,isSold);
 
 
     }

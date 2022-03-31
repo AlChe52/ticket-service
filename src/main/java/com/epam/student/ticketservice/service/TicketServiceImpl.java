@@ -30,27 +30,16 @@ public class TicketServiceImpl implements TicketService{
      }
 
     @Override
-    public List<Ticket> getTicketsByPlaneIdWithFilter(Long id, Boolean isSold) {
+    public List<Ticket> getTicketsByPlaneIdWithQuery(Long id, Boolean isSold) {
         System.out.println(isSold);
+            if (isSold==null)
+            return getTicketsByPlaneId(id);
+
         List <Ticket> tickets = new ArrayList<>();
-        if (isSold==null) {
-            Iterable<TicketEntity> iterable = ticketRepository.getTicketEntity(id);
-            for (TicketEntity ticketEntity : iterable) {
-                tickets.add(mapper.map(ticketEntity, Ticket.class));
-            }
-            return tickets;
-        }
-//        if (filter.equals(true) || filter.equals(false)) {
-//            throw new WrongQueryExeption("Wrong query");
-//        }
-
-
-
-        Iterable <TicketEntity> iterable = ticketRepository.getTicketsByFilter(id, true);
+        Iterable <TicketEntity> iterable = ticketRepository.getTicketsByQuery(id,isSold);
         for (TicketEntity ticketEntity:iterable) {
             tickets.add(mapper.map(ticketEntity, Ticket.class));
         }
-
         return tickets;
     }
 
