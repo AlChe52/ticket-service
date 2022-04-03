@@ -20,9 +20,8 @@ public class UserEntity {
     private String firstname;
     private String lastname;
     private String passport;
-    @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn (name = "user_entity_id")
-    private List<TicketEntity> tickets;
+    @OneToMany (mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+     private List<TicketEntity> tickets;
 
     private Boolean isDeleted;
 

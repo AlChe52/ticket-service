@@ -37,13 +37,12 @@ public class PlaneController {
     public void editPlane (@PathVariable Long id, @RequestBody PlaneDTO planeDTO){
         Plane plane = mapper.map(planeDTO,Plane.class);
         plane.setId(id);
-        System.out.println(plane);
         planeService.editPlane(plane);
     }
 
     @PatchMapping ("/{id}")
     public void deletePlane (@PathVariable Long id) {
-        planeService.deletePlane(id);
+        planeService.markDeletePlane(id);
     }
 
 }

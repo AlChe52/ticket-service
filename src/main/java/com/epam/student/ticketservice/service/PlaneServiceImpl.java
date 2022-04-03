@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class PlaneServiceImpl implements PlaneService {
     private final PlaneRepository planeRepository ;
     private final TicketRepository ticketRepository;
     private final MapperFacade mapper;
+    private final TicketService ticketService;
 
     @Override
     public List<Plane> getAllPlanesFromCurrentDate() {
@@ -27,7 +29,7 @@ public class PlaneServiceImpl implements PlaneService {
         Iterable <PlaneEntity>  iterable = planeRepository.getAllPlanesByCurrentDate();
          for (PlaneEntity planeEntity : iterable) {
              Plane plane = mapper.map(planeEntity,Plane.class);
-            plane.setTickets(getTicketList(plane));
+             plane.setTickets(getTicketList(plane));
              planes.add(plane);
          }
         return planes;
@@ -35,10 +37,12 @@ public class PlaneServiceImpl implements PlaneService {
 
     @Override
     public Plane getPlaneById(Long id) {
-        PlaneEntity planeEntity = planeRepository.findById(id)
-                .orElseThrow(() -> new PlaneNotFoundExeption("Sorry,plane nor found: id="+id));
+        isFoundPlane(id);
+        Optional<PlaneEntity> planeEntity = planeRepository.findById(id);
+        Plane plane = mapper.map(planeEntity.get(),Plane.class);
+        plane.setTickets(getTicketList(plane));
 
-        return mapper.map(planeEntity,Plane.class);
+        return plane;
     }
 
     @Override
@@ -51,31 +55,32 @@ public class PlaneServiceImpl implements PlaneService {
 
     @Override
     public void editPlane(Plane plane) {
-        if (!planeRepository.existsById(plane.getId()))
-            throw new PlaneNotFoundExeption("Plane not found, id="+plane.getId());
-
+        isFoundPlane(plane.getId());
         plane.setTickets(getTicketList(plane));
         PlaneEntity planeEntity = mapper.map(plane,PlaneEntity.class);
-        planeEntity.setIsDeleted(Boolean.FALSE);
+        planeEntity.setIsDeleted(false);
         planeRepository.save(planeEntity);
     }
 
     @Override
-    public void deletePlane(Long id) {
-        Plane plane = getPlaneById(id);
-        PlaneEntity planeEntity = mapper.map(plane,PlaneEntity.class);
-        planeEntity.setIsDeleted(true);
-        planeRepository.save(planeEntity);
-        List<TicketEntity> iterable = ticketRepository.getTicketEntity(plane.getId());
+    public void markDeletePlane(Long id) {
+        isFoundPlane(id);
+        Optional<PlaneEntity> planeEntity = planeRepository.findById(id);
+        planeEntity.get().setIsDeleted(true);
+
+        List <TicketEntity> tickets = new ArrayList<>();
+        Iterable <TicketEntity> iterable = ticketRepository.getTicketEntity(id);
         for ( TicketEntity ticketEntity: iterable) {
             ticketEntity.setIsDeleted(true);
-            ticketRepository.save(ticketEntity);
+            tickets.add(ticketEntity);
         }
+        planeEntity.get().setTickets(tickets);
+        planeRepository.save(planeEntity.get());
     }
 
     private List <Ticket> getTicketList (Plane plane) {
           List<Ticket> tickets = new ArrayList<>();
-         if (plane.getId()==null) {
+          if (plane.getId()==null) {
               for (int i = 0; i < plane.getPlaces(); i++) {
                 Ticket ticket = new Ticket();
                 ticket.setIsDeleted(Boolean.FALSE);
@@ -85,18 +90,12 @@ public class PlaneServiceImpl implements PlaneService {
             return tickets;
         }
 
-        List<TicketEntity> iterable = ticketRepository.getTicketEntity(plane.getId());
-
-       for ( TicketEntity ticketEntity: iterable) {
-            ticketEntity.setIsSold(false);
-           tickets.add(mapper.map(ticketEntity,Ticket.class));
+        List<Ticket> iterable = ticketService.getTicketsByPlaneId(plane.getId());
+          Plane planeTemp = getPlaneByIdTicket(plane.getId());
+       for (Ticket ticket: iterable) {
+           ticket.setPlane(planeTemp);
+           tickets.add(ticket);
        }
-
-       for (Ticket ticket: tickets) {
-           ticket.setPlane(getPlaneByIdTicket(plane.getId()));
-       }
-
-
         if ((plane.getPlaces() - tickets.size()) < 0) {
             tickets.removeAll(tickets.subList(plane.getPlaces(), tickets.size()));
             return tickets;
@@ -120,4 +119,13 @@ public class PlaneServiceImpl implements PlaneService {
         plane.setTickets(null);
          return plane;
         }
+
+    private void isFoundPlane(Long planeId) {
+        if (!planeRepository.existsById(planeId))
+            throw new PlaneNotFoundExeption("Sorry, ticket nor found: id=" + planeId);
+
+
+    }
+
+
 }

@@ -11,7 +11,7 @@ public interface PlaneService {
     Plane getPlaneById (Long id);
     void addPlane (Plane plane);
     void editPlane (Plane plane);
-    void deletePlane (Long id);
+    void markDeletePlane (Long id);
 
 
 

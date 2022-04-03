@@ -10,7 +10,11 @@ public interface TicketService {
 
     List <Ticket> getTicketsByPlaneIdWithQuery (Long id,Boolean isSold);
 
-    Ticket getTicketById (Long id);
+    Ticket getTicketByIdWithPlaneId (Long planeid, Long ticketid);
+
+    void editTicket (Ticket ticket);
+
+    void markTicketToDelete (Long ticketid);
 
 
 }
