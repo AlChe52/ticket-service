@@ -9,6 +9,7 @@ import com.epam.student.ticketservice.repository.PlaneRepository;
 import com.epam.student.ticketservice.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ public class PlaneServiceImpl implements PlaneService {
     private final TicketService ticketService;
 
     @Override
-    public List<Plane> getAllPlanesFromCurrentDate() {
+    public List<Plane> getAllPlanesFromCurrentDate(Pageable pageable) {
         ArrayList<Plane> planes = new ArrayList<>();
-        Iterable <PlaneEntity>  iterable = planeRepository.getAllPlanesByCurrentDate();
+        Iterable <PlaneEntity>  iterable = planeRepository.getAllPlanesByCurrentDate(pageable);
          for (PlaneEntity planeEntity : iterable) {
              Plane plane = mapper.map(planeEntity,Plane.class);
              plane.setTickets(getTicketList(plane));
