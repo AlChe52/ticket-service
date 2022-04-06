@@ -9,6 +9,7 @@ import com.epam.student.ticketservice.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TicketServiceImpl implements TicketService{
 
     private final TicketRepository ticketRepository;

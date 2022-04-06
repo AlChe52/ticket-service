@@ -15,12 +15,12 @@ import java.util.List;
 public class UserEntity {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
     private String firstname;
     private String lastname;
     private String passport;
-    @OneToMany (mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+     @OneToMany (mappedBy = "userEntity",cascade = CascadeType.ALL, orphanRemoval = true)
      private List<TicketEntity> tickets;
 
     private Boolean isDeleted;

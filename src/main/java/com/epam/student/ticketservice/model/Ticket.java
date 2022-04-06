@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Ticket {
 
     Long id;

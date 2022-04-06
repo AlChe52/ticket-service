@@ -3,7 +3,6 @@ package com.epam.student.ticketservice.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,24 +11,25 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@ToString
-@Table(name = "ticket")
+@Table (name ="ticket")
 public class TicketEntity {
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
 
 
-    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn (name = "plane_id")
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn (name = "plane.id")
     private PlaneEntity planeEntity;
 
-    @ManyToOne (cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn (name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "user.id")
     private UserEntity userEntity;
 
     private BigDecimal price;
+
     private Boolean isDeleted;
+
     private Boolean isSold;
 
 }

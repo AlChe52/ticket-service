@@ -13,22 +13,30 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "plane")
+@Table (name = "plane")
 public class PlaneEntity {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
+
     private String name;
+
     private Integer places;
+
     private LocalDate depart;
+
     private Duration duration;
+
     @Column (name = "\"FROM\"")
+
     private String from;
+
     private String to;
 
-    @OneToMany (mappedBy = "planeEntity", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "planeEntity",cascade = CascadeType.ALL)
     private List<TicketEntity> tickets;
+
     private Boolean isDeleted;
 
 
