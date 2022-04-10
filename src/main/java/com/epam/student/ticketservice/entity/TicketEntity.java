@@ -14,16 +14,16 @@ import java.math.BigDecimal;
 @Table (name ="ticket")
 public class TicketEntity {
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "plane.id")
+    @JoinColumn (name = "plane_id")
     private PlaneEntity planeEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name = "user.id")
+    @JoinColumn (name = "user_id")
     private UserEntity userEntity;
 
     private BigDecimal price;

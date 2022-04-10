@@ -12,7 +12,7 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository <TicketEntity, Long> {
 
 
-      @Query (value = "SELECT * FROM ticket JOIN plane WHERE plane.id= :planeid",nativeQuery = true)
+      @Query (value = "SELECT * FROM ticket WHERE plane_id= :planeid",nativeQuery = true)
       List <TicketEntity> getTicketEntity (Long planeid);
 
 
