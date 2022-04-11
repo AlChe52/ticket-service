@@ -1,8 +1,8 @@
 package com.epam.student.ticketservice.service;
 
 import com.epam.student.ticketservice.entity.TicketEntity;
-import com.epam.student.ticketservice.exeptions.PlaneNotFoundExeption;
-import com.epam.student.ticketservice.exeptions.TicketNotFoundExeption;
+import com.epam.student.ticketservice.exeptions.PlaneNotFoundException;
+import com.epam.student.ticketservice.exeptions.TicketNotFoundException;
 import com.epam.student.ticketservice.model.Ticket;
 import com.epam.student.ticketservice.repository.PlaneRepository;
 import com.epam.student.ticketservice.repository.TicketRepository;
@@ -48,7 +48,7 @@ public class TicketServiceImpl implements TicketService{
     @Override
     public Ticket getTicketByIdWithPlaneId(Long planeid, Long ticketid) {
       if (!planeRepository.existsById(planeid))
-              throw new PlaneNotFoundExeption("Sorry, plane nor found: id="+planeid);
+              throw new PlaneNotFoundException("Sorry, plane nor found: id="+planeid);
      isFoundTicket(ticketid);
 
      TicketEntity ticketEntity = ticketRepository.findByPlaneEntityIdAndTicketEntityId(planeid,ticketid);
@@ -73,7 +73,7 @@ public class TicketServiceImpl implements TicketService{
 
     private void isFoundTicket (Long ticketId) {
         if (!ticketRepository.existsById(ticketId))
-            throw new TicketNotFoundExeption("Sorry, ticket nor found: id=" + ticketId);
+            throw new TicketNotFoundException("Sorry, ticket nor found: id=" + ticketId);
 
 
     }

@@ -1,7 +1,7 @@
 package com.epam.student.ticketservice.service;
 
 import com.epam.student.ticketservice.entity.UserEntity;
-import com.epam.student.ticketservice.exeptions.UserNotFoundExeption;
+import com.epam.student.ticketservice.exeptions.UserNotFoundException;
 import com.epam.student.ticketservice.model.User;
 import com.epam.student.ticketservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserById(Long id) {
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundExeption("Sorry, user nor found: id="+id));
+                .orElseThrow(() -> new UserNotFoundException("Sorry, user nor found: id="+id));
         return mapper.map(userEntity,User.class);
     }
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void editUser(User user) {
         if (!userRepository.existsById(user.getId()))
-            throw new UserNotFoundExeption("User not found, id="+user.getId());
+            throw new UserNotFoundException("User not found, id="+user.getId());
         UserEntity userEntity = mapper.map(user,UserEntity.class);
         userEntity.setIsDeleted(Boolean.FALSE);
         userRepository.save(userEntity);
