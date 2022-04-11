@@ -35,7 +35,7 @@ public class PlaneEntity {
 
     private String to;
 
-    @OneToMany (mappedBy = "planeEntity",cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "planeEntity",cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<TicketEntity> tickets;
 

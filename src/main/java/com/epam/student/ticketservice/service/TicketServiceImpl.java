@@ -1,8 +1,8 @@
 package com.epam.student.ticketservice.service;
 
+import com.epam.student.ticketservice.entity.PlaneEntity;
 import com.epam.student.ticketservice.entity.TicketEntity;
 import com.epam.student.ticketservice.exeptions.PlaneNotFoundException;
-import com.epam.student.ticketservice.exeptions.TicketNotFoundException;
 import com.epam.student.ticketservice.model.Ticket;
 import com.epam.student.ticketservice.repository.PlaneRepository;
 import com.epam.student.ticketservice.repository.TicketRepository;
@@ -25,9 +25,13 @@ public class TicketServiceImpl implements TicketService{
     @Override
     public List<Ticket> getTicketsByPlaneId(Long id) {
            List <Ticket> tickets = new ArrayList<>();
+         PlaneEntity planeEntity = planeRepository.getById(id);
+
            Iterable <TicketEntity> iterable = ticketRepository.getTicketEntity(id);
-           for (TicketEntity ticketEntity:iterable) {
+           for (TicketEntity ticketEntity: iterable) {
+              ticketEntity.setPlaneEntity(planeEntity);
              tickets.add(mapper.map(ticketEntity, Ticket.class));
+
          }
         return tickets;
      }
@@ -49,7 +53,6 @@ public class TicketServiceImpl implements TicketService{
     public Ticket getTicketByIdWithPlaneId(Long planeid, Long ticketid) {
       if (!planeRepository.existsById(planeid))
               throw new PlaneNotFoundException("Sorry, plane nor found: id="+planeid);
-     isFoundTicket(ticketid);
 
      TicketEntity ticketEntity = ticketRepository.findByPlaneEntityIdAndTicketEntityId(planeid,ticketid);
         return mapper.map(ticketEntity,Ticket.class);
@@ -57,29 +60,18 @@ public class TicketServiceImpl implements TicketService{
 
     @Override
     public void editTicket(Ticket ticket) {
-      isFoundTicket(ticket.getId());
       TicketEntity ticketEntity = mapper.map(ticket,TicketEntity.class);
       ticketRepository.save(ticketEntity);
     }
 
     @Override
     public void markTicketToDelete(Long ticketid) {
-        isFoundTicket(ticketid);
-        TicketEntity ticketEntity = ticketRepository.getById(ticketid);
+        TicketEntity ticketEntity = ticketRepository.findById(ticketid)
+                .orElseThrow(() -> new PlaneNotFoundException("Ticket not found: id = " + ticketid));
         ticketEntity.setIsDeleted(true);
         ticketRepository.save(ticketEntity);
-
     }
+  }
 
-    private void isFoundTicket (Long ticketId) {
-        if (!ticketRepository.existsById(ticketId))
-            throw new TicketNotFoundException("Sorry, ticket nor found: id=" + ticketId);
-
-
-    }
-
-
-
-}
 
 

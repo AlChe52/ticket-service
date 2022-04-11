@@ -56,7 +56,7 @@ public class PlaneController {
     }
 
     @PatchMapping ("/{id}")
-    public void deletePlane (@PathVariable Long id) {
+    public void markPlaneToDelete (@PathVariable Long id) {
         planeService.markDeletePlane(id);
     }
 
