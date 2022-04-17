@@ -104,8 +104,7 @@ public class PlaneServiceImpl implements PlaneService {
         planeEntity.setIsDeleted(true);
         planeRepository.save(planeEntity);
 
-         List <Ticket> tickets = new ArrayList<>();
-        Iterable <Ticket> iterable = ticketService.getTicketsByPlaneId(id);
+          Iterable <Ticket> iterable = ticketService.getTicketsByPlaneId(id);
         for ( Ticket ticket: iterable) {
             ticket.setIsDeleted(true);
             TicketEntity ticketEntity = mapper.map (ticket, TicketEntity.class);
@@ -123,22 +122,7 @@ public class PlaneServiceImpl implements PlaneService {
               tickets.add(ticket);
         }
 
-        if ((plane.getPlaces() - tickets.size()) < 0) {
-            tickets.removeAll(tickets.subList(plane.getPlaces(), tickets.size()));
-            return tickets;
-        }
-
-        if ((plane.getPlaces() - tickets.size()) > 0) {
-            for (int i = tickets.size(); i < plane.getPlaces(); i++) {
-                Ticket ticket = new Ticket();
-                ticket.setPlane(planeTemp);
-                ticket.setIsDeleted(Boolean.FALSE);
-                ticket.setIsSold(Boolean.FALSE);
-                tickets.add(ticket);
-            }
-            return tickets;
-        }
-        return tickets;
+             return tickets;
     }
 
         private Plane getPlaneByIdTicket (Long id) {

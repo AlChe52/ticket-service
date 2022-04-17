@@ -3,15 +3,11 @@ package com.epam.student.ticketservice.service;
 
 import com.epam.student.ticketservice.model.Plane;
 
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 
 public interface PlaneService {
 
-   List<Plane> getAllPlanesFromCurrentDate();
+   List<Plane> getAllPlanesFromCurrentDate(); //Получение всех рейсов
     Plane getPlaneById (Long id);
     void addPlane (Plane plane);
     void editPlane (Plane plane);
