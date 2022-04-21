@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,13 +31,13 @@ public class PlaneController {
             description = "Planes are found"
     ))
     @GetMapping
-    List<Plane> getAllPlanesByCurrentDate () {
-//        List <Plane> planes =
-//        int start = (int) pageable.getOffset();
-//        int end = (int) ((start + pageable.getPageSize()) > planes.size() ? planes.size()
-//                : (start + pageable.getPageSize()));
-//        new PageImpl<Plane>(planes.subList(start, end), pageable, planes.size());
-        return planeService.getAllPlanesFromCurrentDate();
+    Page<Plane> getAllPlanesByCurrentDate (Pageable pageable) {
+        List <Plane> planes =planeService.getAllPlanesFromCurrentDate();
+        int start = (int) pageable.getOffset();
+        int end = ((start + pageable.getPageSize()) > planes.size() ? planes.size()
+                : (start + pageable.getPageSize()));
+
+        return new PageImpl (planes.subList(start, end), pageable, planes.size());
     }
 
     @GetMapping("/{id}")
