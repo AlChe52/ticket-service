@@ -91,8 +91,7 @@ public class TestUserController {
        @Test
        public void test_AddUser() throws Exception {
                    User user = new User(1L, "Ivan", "Petrov", "220555", null, false);
-
-                    mockMvc.perform(post("/users")
+                      mockMvc.perform(post("/users")
                       .content(mapper.writeValueAsString(user))
                       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                       .andDo(print())

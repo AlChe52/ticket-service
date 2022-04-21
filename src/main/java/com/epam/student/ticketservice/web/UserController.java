@@ -39,8 +39,8 @@ public class UserController {
    }
 
    @PatchMapping ("/{id}")
-   public void deleteUser (@PathVariable Long id) {
-        userService.deleteUser(id);
+   public void markUserToDelete (@PathVariable Long id) {
+        userService.markUserToDelete(id);
    }
 
 }

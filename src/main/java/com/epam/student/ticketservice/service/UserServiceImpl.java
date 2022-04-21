@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void markUserToDelete(Long id) {
          User user = getUserById(id);
          UserEntity userEntity = mapper.map(user,UserEntity.class);
          userEntity.setIsDeleted(true);
