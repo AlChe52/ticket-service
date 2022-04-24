@@ -25,26 +25,21 @@ public class TicketServiceImpl implements TicketService{
     private final PlaneRepository planeRepository;
     private final MapperFacade mapper;
 
+
     @Override
     public List<Ticket> getTicketsByPlaneId(Long id) {
         List <Ticket> ticketList = new ArrayList<>();
-       Optional<PlaneEntity> planeEntity = planeRepository.findById(id);
+        Optional<PlaneEntity> planeEntity = planeRepository.findById(id);
+        Plane plane = mapper.map(planeEntity.get(), Plane.class);
+        plane.setTickets(null);
 
-        System.out.println(planeEntity.get().getFrom());
 
-         //  Iterable <TicketEntity> iterable = ticketRepository.getTicketEntity(id);
-        List <TicketEntity> tickets = ticketRepository.getTicketEntity(id);
-        for (int i = 0; i < tickets.size() ; i++) {
-            tickets.get(i).setPlaneEntity(planeEntity.get());
-            System.out.println(tickets.get(i));
-              }
-
-           for (TicketEntity ticketEntity: tickets) {
-              Ticket ticket = new Ticket();
-                      ticket= mapper.map(ticketEntity, Ticket.class);
-               System.out.println(ticket);
-                   ticketList.add(ticket);
-         }
+        Iterable <TicketEntity> iterable = ticketRepository.getTicketEntity(id);
+        for (TicketEntity ticketEntity:iterable) {
+            Ticket  ticket = mapper.map(ticketEntity, Ticket.class);
+            ticket.setPlane(plane);
+            ticketList.add(ticket);
+        }
         return ticketList;
      }
 
@@ -54,9 +49,14 @@ public class TicketServiceImpl implements TicketService{
             return getTicketsByPlaneId(id);
 
         List <Ticket> tickets = new ArrayList<>();
-        Iterable <TicketEntity> iterable = ticketRepository.getTicketsByQuery(id,isSold);
+        Optional<PlaneEntity> planeEntity = planeRepository.findById(id);
+        Plane plane = mapper.map(planeEntity.get(), Plane.class);
+        plane.setTickets(null);
+         Iterable <TicketEntity> iterable = ticketRepository.getTicketsByQuery(id,isSold);
         for (TicketEntity ticketEntity:iterable) {
-            tickets.add(mapper.map(ticketEntity, Ticket.class));
+            Ticket  ticket = mapper.map(ticketEntity, Ticket.class);
+             ticket.setPlane(plane);
+             tickets.add(ticket);
         }
         return tickets;
     }
@@ -66,8 +66,6 @@ public class TicketServiceImpl implements TicketService{
            if (!ticketRepository.existsById(ticketid))
             throw new TicketNotFoundException("Sorry, ticket nor found: id="+planeid);
      TicketEntity ticketEntity = ticketRepository.findByPlaneEntityIdAndTicketEntityId(planeid,ticketid);
-
-
 
      Ticket ticket = mapper.map(ticketEntity,Ticket.class);
 

@@ -1,6 +1,5 @@
 package com.epam.student.ticketservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,7 +35,6 @@ public class PlaneEntity {
     private String to;
 
     @OneToMany (mappedBy = "planeEntity",cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
     private List<TicketEntity> tickets;
 
     private Boolean isDeleted;

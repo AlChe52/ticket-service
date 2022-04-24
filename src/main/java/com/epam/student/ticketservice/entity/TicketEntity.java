@@ -18,8 +18,8 @@ public class TicketEntity {
     private Long id;
 
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "plane_id")
+   @ManyToOne (fetch = FetchType.LAZY)
+   @JoinColumn (name = "plane_id")
     private PlaneEntity planeEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)

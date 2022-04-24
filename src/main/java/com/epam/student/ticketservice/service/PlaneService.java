@@ -7,11 +7,35 @@ import java.util.List;
 
 public interface PlaneService {
 
-   List<Plane> getAllPlanesFromCurrentDate(); //Получение всех рейсов
+    /**
+     * Получение всех рейсво с текущей даты
+     */
+    List<Plane> getAllPlanesFromCurrentDate();
+
+    /**
+     * Поиск рейса по Id
+     * @param id
+     * @return
+     */
     Plane getPlaneById (Long id);
+
+    /**
+     * Добавляет рейс, при создание рейса автоматический добавляется количество билетов в зависимости от мест
+     * @param plane
+     */
     void addPlane (Plane plane);
+
+    /**
+     * Обновление информации о рейсе
+     * @param plane
+     */
     void editPlane (Plane plane);
-    void markDeletePlane (Long id);
+
+    /**
+     * Помечает рейс на удаление, IsDeleted = true, также помечаются все билеты
+     * @param id
+     */
+   void markDeletePlane (Long id);
 
 
 

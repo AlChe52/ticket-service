@@ -14,6 +14,6 @@ public interface PlaneRepository extends JpaRepository <PlaneEntity,Long> {
     @Query (value = "SELECT * FROM plane WHERE depart>=NOW()",nativeQuery = true)
     List<PlaneEntity> getAllPlanesByCurrentDate();
 
-    @Query (value = "SELECT * FROM PLANE JOIN TICKET WHERE plane.id=:id",nativeQuery = true)
+    @Query (value = "SELECT * FROM PLANE JOIN TICKET ON ticket.id=plane_id WHERE plane.id= :id",nativeQuery = true)
     PlaneEntity findPlaneByTicketId (Long id);
 }

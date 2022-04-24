@@ -27,6 +27,7 @@ public class PlaneServiceImpl implements PlaneService {
     public List<Plane> getAllPlanesFromCurrentDate() {
         List<Plane> planes = new ArrayList<>();
         Iterable <PlaneEntity>  iterable = planeRepository.getAllPlanesByCurrentDate();
+
          for (PlaneEntity planeEntity : iterable) {
              Plane plane = mapper.map(planeEntity,Plane.class);
              List <Ticket> tikets = getTicketList(plane);
@@ -41,7 +42,7 @@ public class PlaneServiceImpl implements PlaneService {
         PlaneEntity planeEntity = planeRepository.findById(id)
                               .orElseThrow(() -> new PlaneNotFoundException("Plane not found: id = " + id));
         Plane plane = mapper.map(planeEntity,Plane.class);
-        Plane planeTemp = getPlaneByIdTicket(id);
+        Plane planeTemp = getPlaneTempById(id);
         List <Ticket> ticketList = new ArrayList<>();
         Iterable <Ticket> iterable = plane.getTickets();
         for (Ticket ticket: iterable) {
@@ -113,9 +114,9 @@ public class PlaneServiceImpl implements PlaneService {
         }
    }
 
-    private List <Ticket> getTicketList (Plane plane) {
+     private List <Ticket> getTicketList (Plane plane) {
         List<Ticket> tickets = new ArrayList<>();
-        Plane planeTemp = getPlaneByIdTicket(plane.getId());
+        Plane planeTemp = getPlaneTempById(plane.getId());
         List<Ticket> iterable = ticketService.getTicketsByPlaneId(plane.getId());
         for (Ticket ticket: iterable) {
              ticket.setPlane(planeTemp);
@@ -125,19 +126,12 @@ public class PlaneServiceImpl implements PlaneService {
              return tickets;
     }
 
-        private Plane getPlaneByIdTicket (Long id) {
-       Optional<PlaneEntity> planeEntity = planeRepository.findById(id);
+        public Plane getPlaneTempById (Long id) {
+        Optional<PlaneEntity> planeEntity = planeRepository.findById(id);
         Plane plane = mapper.map(planeEntity.get(), Plane.class);
         plane.setTickets(null);
          return plane;
         }
-
-    private void isFoundPlane(Long planeId) {
-        if (!planeRepository.existsById(planeId))
-            throw new PlaneNotFoundException("Sorry, plane nor found: id=" + planeId);
-
-
-    }
 
 
 }

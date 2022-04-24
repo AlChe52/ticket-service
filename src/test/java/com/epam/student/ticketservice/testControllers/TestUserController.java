@@ -6,6 +6,7 @@ import com.epam.student.ticketservice.repository.UserRepository;
 import com.epam.student.ticketservice.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,10 +21,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
@@ -58,6 +61,9 @@ public class TestUserController {
                       .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(2))
                       .andExpect(MockMvcResultMatchers.jsonPath("$[1].firstname").value("Sidor"))
                       .andExpect(MockMvcResultMatchers.jsonPath("$[1].passport").value("235789"));
+
+           Mockito.verify(userService, Mockito.times(1)).getAllUsers();
+           verifyNoMoreInteractions(userService);
        }
 
 
@@ -81,12 +87,15 @@ public class TestUserController {
                       .andExpect(MockMvcResultMatchers.jsonPath("$.firstname").value("Ivan"));
        }
 
-       @Test
-       public void test_UserNotFound () throws Exception {
-              mockMvc.perform(get("/users/5"))
-                      .andDo(print())
-                      .andExpect(status().isNotFound());
-       }
+//       @Test
+//       public void test_UserNotFound () throws Exception {
+//
+//           when(userService.getUserById(1L)).thenReturn(null);
+//
+//              mockMvc.perform(get("/users/5"))
+//                      .andDo(print())
+//                      .andExpect;
+//       }
 
        @Test
        public void test_AddUser() throws Exception {
@@ -110,6 +119,7 @@ public class TestUserController {
                       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                       .andDo(print())
                       .andExpect(status().isOk());
+
              }
 
        @Test

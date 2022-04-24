@@ -32,12 +32,12 @@ public class PlaneController {
     ))
     @GetMapping
     Page<Plane> getAllPlanesByCurrentDate (Pageable pageable) {
-        List <Plane> planes =planeService.getAllPlanesFromCurrentDate();
+        List<Plane> planes = planeService.getAllPlanesFromCurrentDate();
         int start = (int) pageable.getOffset();
         int end = ((start + pageable.getPageSize()) > planes.size() ? planes.size()
                 : (start + pageable.getPageSize()));
 
-        return new PageImpl (planes.subList(start, end), pageable, planes.size());
+        return new PageImpl(planes.subList(start, end), pageable, planes.size());
     }
 
     @GetMapping("/{id}")

@@ -47,8 +47,8 @@ public class TestPlaneController {
 
     @Test
     public void test_GetAllPlanesFromCurrentData () throws Exception {
-      Plane plane1 = new Plane(1L, "555", 5, LocalDate.of(2202,05,05), Duration.ofMinutes(500), "Moscow", "NN" , null, false);
-      Plane plane2 = new Plane(2L, "666", 5, LocalDate.of(2202,06,05), Duration.ofMinutes(500), "Moscow", "NN" , null, false);
+      Plane plane1 = new Plane(1L, "555", 2, LocalDate.of(2202,05,05), Duration.ofMinutes(500), "Moscow", "NN" , null, false);
+      Plane plane2 = new Plane(2L, "666", 2, LocalDate.of(2202,06,05), Duration.ofMinutes(500), "Moscow", "NN" , null, false);
 
 
         when(planeService.getAllPlanesFromCurrentDate()).
@@ -56,7 +56,8 @@ public class TestPlaneController {
         mockMvc
                 .perform(MockMvcRequestBuilders.get("/planes"))
                 .andDo(print())
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(2));
 
     }
     @Test
