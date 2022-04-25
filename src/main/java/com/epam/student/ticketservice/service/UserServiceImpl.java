@@ -1,8 +1,14 @@
 package com.epam.student.ticketservice.service;
 
+import com.epam.student.ticketservice.entity.PlaneEntity;
+import com.epam.student.ticketservice.entity.TicketEntity;
 import com.epam.student.ticketservice.entity.UserEntity;
 import com.epam.student.ticketservice.exeptions.UserNotFoundException;
+import com.epam.student.ticketservice.model.Plane;
+import com.epam.student.ticketservice.model.Ticket;
 import com.epam.student.ticketservice.model.User;
+import com.epam.student.ticketservice.repository.PlaneRepository;
+import com.epam.student.ticketservice.repository.TicketRepository;
 import com.epam.student.ticketservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
@@ -10,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,12 +24,30 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final MapperFacade mapper;
+    private final TicketRepository ticketRepository;
+    private final PlaneRepository planeRepository;
 
     @Override
     public User getUserById(Long id) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Sorry, user nor found: id="+id));
-        return mapper.map(userEntity,User.class);
+
+        List <Ticket> tickets = new ArrayList<>();
+
+        Iterable <TicketEntity> iterable = ticketRepository.getTicketEntityByUserId(id);
+        User userTemp = getUserTempById(id);
+
+        for (TicketEntity ticketEntity: iterable) {
+            Ticket ticket = mapper.map(ticketEntity,Ticket.class);
+            ticket.setUser(userTemp);
+             ticket.setPlane(getPlaneByTicketId(ticket.getId()));
+             tickets.add(ticket);
+        }
+            User  user =mapper.map(userEntity,User.class);
+
+        user.setTickets(tickets);
+
+        return user;
     }
 
     @Override
@@ -58,5 +83,21 @@ public class UserServiceImpl implements UserService{
          userEntity.setIsDeleted(true);
          userRepository.save(userEntity);
     }
+
+    private User getUserTempById (Long id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        User user = mapper.map(userEntity.get(), User.class);
+       user.setTickets(null);
+        return user;
+    }
+
+    private Plane getPlaneByTicketId (Long ticketId) {
+
+        PlaneEntity planeEntity = planeRepository.findPlaneByTicketId(ticketId);
+         planeEntity.setTickets(null);
+
+        return mapper.map (planeEntity, Plane.class);
+    }
+
 
 }

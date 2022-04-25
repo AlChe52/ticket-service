@@ -23,4 +23,7 @@ public interface TicketRepository extends JpaRepository <TicketEntity, Long> {
 
      TicketEntity findByPlaneEntityIdAndTicketEntityId (Long planeid, Long ticketid);
 
+    @Query (value = "SELECT * FROM ticket WHERE user_id= :userid",nativeQuery = true)
+    List <TicketEntity> getTicketEntityByUserId (Long userid);
+
 }
