@@ -31,21 +31,9 @@ public class UserServiceImpl implements UserService{
     public User getUserById(Long id) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Sorry, user nor found: id="+id));
-
-        List <Ticket> tickets = new ArrayList<>();
-
-        Iterable <TicketEntity> iterable = ticketRepository.getTicketEntityByUserId(id);
-        User userTemp = getUserTempById(id);
-
-        for (TicketEntity ticketEntity: iterable) {
-            Ticket ticket = mapper.map(ticketEntity,Ticket.class);
-            ticket.setUser(userTemp);
-             ticket.setPlane(getPlaneByTicketId(ticket.getId()));
-             tickets.add(ticket);
-        }
             User  user =mapper.map(userEntity,User.class);
 
-        user.setTickets(tickets);
+        user.setTickets(getTicketsForUser(id));
 
         return user;
     }
@@ -54,8 +42,12 @@ public class UserServiceImpl implements UserService{
     public List<User> getAllUsers() {
         ArrayList <User> users = new ArrayList<>();
         Iterable <UserEntity> iterable = userRepository.findAll();
+
         for (UserEntity userEntity: iterable) {
-            users.add(mapper.map(userEntity,User.class));
+            User user = mapper.map(userEntity,User.class);
+            user.setTickets(getTicketsForUser(user.getId()));
+
+            users.add(user);
         }
         return users;
     }
@@ -97,6 +89,20 @@ public class UserServiceImpl implements UserService{
          planeEntity.setTickets(null);
 
         return mapper.map (planeEntity, Plane.class);
+    }
+
+    private List <Ticket> getTicketsForUser (Long userId) {
+        List <Ticket> tickets = new ArrayList<>();
+        Iterable <TicketEntity> iterable = ticketRepository.getTicketEntityByUserId(userId);
+        User userTemp = getUserTempById(userId);
+
+        for (TicketEntity ticketEntity: iterable) {
+            Ticket ticket = mapper.map(ticketEntity,Ticket.class);
+            ticket.setUser(userTemp);
+            ticket.setPlane(getPlaneByTicketId(ticket.getId()));
+            tickets.add(ticket);
+        }
+        return tickets;
     }
 
 

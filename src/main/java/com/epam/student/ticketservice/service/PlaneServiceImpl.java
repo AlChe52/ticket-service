@@ -2,11 +2,14 @@ package com.epam.student.ticketservice.service;
 
 import com.epam.student.ticketservice.entity.PlaneEntity;
 import com.epam.student.ticketservice.entity.TicketEntity;
+import com.epam.student.ticketservice.entity.UserEntity;
 import com.epam.student.ticketservice.exeptions.PlaneNotFoundException;
 import com.epam.student.ticketservice.model.Plane;
 import com.epam.student.ticketservice.model.Ticket;
+import com.epam.student.ticketservice.model.User;
 import com.epam.student.ticketservice.repository.PlaneRepository;
 import com.epam.student.ticketservice.repository.TicketRepository;
+import com.epam.student.ticketservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ public class PlaneServiceImpl implements PlaneService {
     private final MapperFacade mapper;
     private final TicketService ticketService;
     private final TicketRepository ticketRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<Plane> getAllPlanesFromCurrentDate() {
@@ -42,14 +46,16 @@ public class PlaneServiceImpl implements PlaneService {
         PlaneEntity planeEntity = planeRepository.findById(id)
                               .orElseThrow(() -> new PlaneNotFoundException("Plane not found: id = " + id));
         Plane plane = mapper.map(planeEntity,Plane.class);
-        Plane planeTemp = getPlaneTempById(id);
-        List <Ticket> ticketList = new ArrayList<>();
-        Iterable <Ticket> iterable = plane.getTickets();
-        for (Ticket ticket: iterable) {
-            ticket.setPlane(planeTemp);
-           ticketList.add(ticket);
-        }
-           plane.setTickets(ticketList);
+
+//
+//        Plane planeTemp = getPlaneTempById(id);
+//        List <Ticket> ticketList = new ArrayList<>();
+//        Iterable <Ticket> iterable = plane.getTickets();
+//        for (Ticket ticket: iterable) {
+//            ticket.setPlane(planeTemp);
+//           ticketList.add(ticket);
+//        }
+          plane.setTickets(getTicketList(plane));
           return plane;
     }
 
@@ -120,13 +126,16 @@ public class PlaneServiceImpl implements PlaneService {
         List<Ticket> iterable = ticketService.getTicketsByPlaneId(plane.getId());
         for (Ticket ticket: iterable) {
              ticket.setPlane(planeTemp);
-              tickets.add(ticket);
+            UserEntity userEntity  = userRepository.findUserByTicketId(ticket.getId());
+            User user =  mapper.map(userEntity, User.class);
+            ticket.setUser(user);
+             tickets.add(ticket);
         }
 
              return tickets;
     }
 
-        public Plane getPlaneTempById (Long id) {
+        private Plane getPlaneTempById (Long id) {
         Optional<PlaneEntity> planeEntity = planeRepository.findById(id);
         Plane plane = mapper.map(planeEntity.get(), Plane.class);
         plane.setTickets(null);
